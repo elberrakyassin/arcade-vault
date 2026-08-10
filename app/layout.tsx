@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Press_Start_2P, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/lib/auth-context";
+import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
 
 const pixelFont = Press_Start_2P({
   variable: "--font-pixel",
@@ -28,7 +31,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <div className="av-bg" />
         <div className="av-noise" />
         <div id="root">
-          <main className="av-main">{children}</main>
+          <AuthProvider>
+            <Nav />
+            <main className="av-main">{children}</main>
+            <Footer />
+          </AuthProvider>
         </div>
       </body>
     </html>
