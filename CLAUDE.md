@@ -10,6 +10,9 @@ Arcade Vault: plataforma para jugar online y competir por puntuación. En etapa 
 
 Sigue Spec Driven Design con los comandos `/spec` y `/spec-impl` del kit de skills `Klerith/fernando-skills` (instalable vía `npx skills@latest add Klerith/fernando-skills`). Si esos comandos existen en el proyecto, úsalos para features nuevas en vez de improvisar la implementación directamente.
 
+## skills
+usa el skill frontend-design para los diseños de la interfaz de usuario
+
 ## Commands
 
 - `npm run dev` — servidor de desarrollo
