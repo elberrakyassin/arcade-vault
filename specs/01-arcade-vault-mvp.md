@@ -1,6 +1,6 @@
 # 01 — MVP Arcade Vault
 
-**Estado:** aproved
+**Estado:** Implementado
 
 **Depende de:** ninguna
 **Fecha:** 2026-08-10
