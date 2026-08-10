@@ -1,111 +1,55 @@
-const GAMES = [
-  {
-    cover: "cover-bricks",
-    label: "ARCADE",
-    title: "Rompeladrillos",
-    desc: "Destruí todos los bloques antes de que se te acaben las bolas.",
-    score: "128.400",
-  },
-  {
-    cover: "cover-tetro",
-    label: "PUZZLE",
-    title: "Bloques Caídos",
-    desc: "Encajá las piezas y limpiá líneas sin parar de bajar.",
-    score: "94.200",
-  },
-  {
-    cover: "cover-snake",
-    label: "CLÁSICO",
-    title: "Víbora Neón",
-    desc: "Comé, crecé y no te choques con tu propia cola.",
-    score: "310",
-  },
-  {
-    cover: "cover-glot",
-    label: "ARCADE",
-    title: "Comelón",
-    desc: "Escapá de los fantasmas y comé todos los puntos del laberinto.",
-    score: "251.760",
-  },
-  {
-    cover: "cover-invaders",
-    label: "ACCIÓN",
-    title: "Invasores",
-    desc: "Defendé la Tierra de la invasión alienígena, oleada tras oleada.",
-    score: "87.150",
-  },
-  {
-    cover: "cover-rocas",
-    label: "ACCIÓN",
-    title: "Asteroides",
-    desc: "Esquivá y destruí las rocas espaciales a la deriva.",
-    score: "63.900",
-  },
-  {
-    cover: "cover-rana",
-    label: "CLÁSICO",
-    title: "Cruce Riesgoso",
-    desc: "Cruzá el río saltando de tronco en tronco sin caerte.",
-    score: "540",
-  },
-  {
-    cover: "cover-duelo",
-    label: "PUZZLE",
-    title: "Duelo Retro",
-    desc: "El clásico duelo de paletas, ahora en HD pixelado.",
-    score: "21 - 18",
-  },
-] as const;
+"use client";
 
-const FILTERS = ["Todos", "Arcade", "Puzzle", "Acción", "Clásicos"] as const;
+import { useMemo, useState } from "react";
+import { GameCard } from "@/components/GameCard";
+import { GAMES, CATS, type Cat } from "@/lib/games";
 
-export default function Home() {
+export default function BibliotecaPage() {
+  const [q, setQ] = useState("");
+  const [cat, setCat] = useState<Cat>("TODOS");
+
+  const filtered = useMemo(() => {
+    return GAMES.filter(
+      (g) => (cat === "TODOS" || g.cat === cat) && g.title.toLowerCase().includes(q.toLowerCase())
+    );
+  }, [q, cat]);
+
   return (
-    <>
+    <div className="fade-in">
       <section className="av-hero">
-        <h1 className="pixel">ARCADE VAULT</h1>
-        <p className="sub">
-          INSERTA MONEDA PARA CONTINUAR <span className="blink">█</span>
-        </p>
+        <h1 className="flicker">ARCADE VAULT</h1>
+        <div className="sub">
+          INSERTA UNA MONEDA PARA JUGAR <span className="blink">_</span>
+        </div>
       </section>
 
-      <section className="av-filters">
+      <div className="av-filters">
         <div className="av-search">
           <span className="ico">⌕</span>
-          <input type="text" placeholder="Buscar juego..." />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar un juego por nombre…" />
         </div>
         <div className="av-chips">
-          {FILTERS.map((filter, i) => (
-            <span key={filter} className={`chip${i === 0 ? " active" : ""}`}>
-              {filter}
-            </span>
+          {CATS.map((c) => (
+            <button key={c} className={"chip" + (cat === c ? " active" : "")} onClick={() => setCat(c)}>
+              {c}
+            </button>
           ))}
         </div>
-      </section>
+      </div>
 
-      <section className="av-grid">
-        {GAMES.map((game) => (
-          <article key={game.title} className="card">
-            <div className="cover">
-              <div className={`cover-bg ${game.cover}`} />
-              <span className="label">{game.label}</span>
-            </div>
-            <div className="meta">
-              <h2 className="title">{game.title}</h2>
-              <p className="desc">{game.desc}</p>
-              <div className="row">
-                <div className="score-badge">
-                  RÉCORD
-                  <b>{game.score}</b>
-                </div>
-                <button className="btn" type="button">
-                  Jugar
-                </button>
-              </div>
-            </div>
-          </article>
+      <div className="av-grid">
+        {filtered.map((g) => (
+          <GameCard key={g.id} game={g} />
         ))}
-      </section>
-    </>
+        {filtered.length === 0 && (
+          <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: 80, color: "var(--ink-faint)" }}>
+            <div className="pixel" style={{ fontSize: 14, color: "var(--magenta)", marginBottom: 12 }}>
+              NO HAY RESULTADOS
+            </div>
+            <div>Intenta otra búsqueda o categoría.</div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
